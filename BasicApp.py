@@ -2,9 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for
 from tinydb import TinyDB, Query
 
 app = Flask(__name__)
-db = TinyDB('my_database.json')
 
-# db = TinyDB('paper.json')
+db = TinyDB('paper.json')
 table = db.table('papers')
 @app.route('/')
 def index():
@@ -48,14 +47,15 @@ def delete(book_id):
 @app.route('/search', methods=['GET'])
 def search():
     search_query = request.args.get('search').lower()
+    print(search_query)
     books = table.search(
-        (Query().title.search(search_query.lower())) |
-        (Query().ID.search(search_query.lower())) |
-        (Query().author.search(search_query.lower())) |
-        (Query().year.search(search_query.lower())) |
-        (Query().journal.search(search_query.lower()))|
-        (Query().doi.search(search_query.lower())) |
-        (Query().litmapsid.search(search_query.lower())) 
+        (Query().title.search(search_query))|
+        (Query().ID.search(search_query)) |
+        (Query().author.search(search_query)) |
+        (Query().year.search(search_query)) |
+        (Query().journal.search(search_query))|
+        (Query().doi.search(search_query)) |
+        (Query().litmapsid.search(search_query)) 
     )
     return render_template('search_results.html', books=books)
 
