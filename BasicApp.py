@@ -3,6 +3,8 @@ from tinydb import TinyDB, Query
 
 app = Flask(__name__)
 db = TinyDB('my_database.json')
+
+# db = TinyDB('paper.json')
 table = db.table('papers')
 @app.route('/')
 def index():
@@ -12,11 +14,14 @@ def index():
 @app.route('/add', methods=['POST'])
 def add():
     title = request.form.get('title')
+    ID = request.form.get('ID')
     author = request.form.get('author')
     year = request.form.get('year')
-    publisher = request.form.get('publisher')
+    journal = request.form.get('journal')
+    doi = request.form.get('doi')
+    litmapsid = request.form.get('litmapsid')
 
-    table.insert({'title': title, 'author': author, 'year': year, 'publisher': publisher})
+    table.insert({'title': title, 'ID':ID, 'author': author, 'year': year, 'journal': journal, 'doi':doi, 'litmapsid':litmapsid})
     return redirect(url_for('index'))
 
 @app.route('/edit/<int:book_id>', methods=['GET', 'POST'])
@@ -25,11 +30,13 @@ def edit(book_id):
 
     if request.method == 'POST':
         title = request.form.get('title')
+        ID = request.form.get('ID')
         author = request.form.get('author')
         year = request.form.get('year')
-        publisher = request.form.get('publisher')
-
-        table.update({'title': title, 'author': author, 'year': year, 'publisher': publisher}, doc_ids=[book_id])
+        journal = request.form.get('journal')
+        doi = request.form.get('doi')
+        litmapsid = request.form.get('litmapsid')
+        table.update({'title': title, 'ID':ID, 'author': author, 'year': year, 'journal': journal, 'doi':doi, 'litmapsid':litmapsid}, doc_ids=[book_id])
         return redirect(url_for('index'))
     return render_template('edit.html', book=book)
 
@@ -40,14 +47,19 @@ def delete(book_id):
 
 @app.route('/search', methods=['GET'])
 def search():
-    search_query = request.args.get('search')
+    search_query = request.args.get('search').lower()
     books = table.search(
-        (Query().title.search(search_query)) |
-        (Query().author.search(search_query)) |
-        (Query().year.search(search_query)) |
-        (Query().publisher.search(search_query))
+        (Query().title.search(search_query.lower())) |
+        (Query().ID.search(search_query.lower())) |
+        (Query().author.search(search_query.lower())) |
+        (Query().year.search(search_query.lower())) |
+        (Query().journal.search(search_query.lower()))|
+        (Query().doi.search(search_query.lower())) |
+        (Query().litmapsid.search(search_query.lower())) 
     )
     return render_template('search_results.html', books=books)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
