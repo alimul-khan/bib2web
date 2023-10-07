@@ -1,63 +1,122 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Book Database</title>
-</head>
-<body>
-    <h1>Book Database</h1>
+{% extends "base.html" %}
+{% block title %}Book Database{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row mx-5 justify-content-md-center">
+        <h1 class="text-center py-2">Book Database</h1>
+    </div>
 
-    <!-- Add a real-time search form -->
-    <form method="GET" action="/search">
-        <label for="search">Search:</label>
-        <input type="text" name="search" id="search" placeholder="Search...">
+
+    <form method="GET" action="/search"  class="form-horizontal mx-5 justify-content-md-center">
+        <div class="form-group row">
+                <label for="search" class="col-sm-1 col-form-label">Search:</label>
+                <div class="col">
+                    <input type="text" class="form-control" name="search" id="search" placeholder="Search..." required>
+                </div>
+        </div>
     </form>
 
-    <table border="1">
-        <tr>
-            <th>SL No</th>
-            <th>Title</th>
-            <th>ID</th>
-            <th>Author</th>
-            <th>Year</th>
-            <th>Journal</th>
-            <th>DOI</th>
-            <th>LitmapsId</th>   
-            <th>Actions</th>
-        </tr>
-        {% for book in books %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ book.title }}</td>
-            <td>{{ book.ID }}</td>
-            <td>{{ book.author }}</td>
-            <td>{{ book.year }}</td>
-            <td>{{ book.journal }}</td>
-            <td>{{ book.doi }}</td>
-            <td>{{ book.litmapsid }}</td>
-            <td>
-                <a href="/edit/{{ book.doc_id }}">Edit</a>
-                <a href="/delete/{{ book.doc_id }}" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
 
-    <h2>Add a New Article </h2>
-    <form method="POST" action="/add">
-        <label for="title">Title:</label>    <input type="text" name="title" required><br>
-        <label for="ID">ID:</label>    <input type="text" name="ID" required><br>
-        <label for="author">Author:</label>  <input type="text" name="author" required><br>
-        <label for="year">Year:</label>      <input type="number" name="year" required><br>
-        <label for="journal">Journal:</label>   <input type="text" name="journal" value="NA"><br>
-        <label for="doi">DOI:</label>    <input type="text" name="doi" ><br>
-        <label for="litmapsid">LitmapsID:</label>    <input type="text" name="litmapsid" ><br>
-        <input type="submit" value="Add Book">
+    <div class="row mx-5">
+        <table class="table table-bordered">
+                <tr>
+                    <th scope="col">SL No</th>
+                    <th scope="col" >Title</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Year</th>
+                    <th scope="col">Journal</th>
+                    <th scope="col">DOI</th>
+                    <th scope="col">LitmapsId</th>
+                    <th scope="col">Actions</th>
+                </tr>
+        {% for book in books %}
+                <tr>
+                    <td scope="row">{{ loop.index }}</td>
+                    <td scope="row">{{ book.title }}</td>
+                    <td scope="row">{{ book.ID }}</td>
+                    <td scope="row">{{ book.author }}</td>
+                    <td scope="row">{{ book.year }}</td>
+                    <td scope="row">{{ book.journal }}</td>
+                    <td scope="row">{{ book.doi }}</td>
+                    <td scope="row">{{ book.litmapsid }}</td>
+                    <td scope="row">
+                        <a href="/edit/{{ book.doc_id }}">Edit</a>
+                        <a href="/delete/{{ book.doc_id }}" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+    </table>
+    </div>
+
+    <div class="row mx-5">
+        <h2 class="text-center py-3">Add a New Article </h2>
+    </div>
+
+
+
+        <form method="POST" action="/add"  class="form-horizontal mx-5 justify-content-md-center">
+        <div class="form-group row">
+            <label for="title" class="col-sm-2 col-form-label">Title:</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" name="title" placeholder="Title" required>
+            </div>
+        </div>
+
+         <div class="form-group row">
+            <label for="ID" class="col-sm-2 col-form-label">ID:</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" name="ID" placeholder="ID" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="author" class="col-sm-2 col-form-label">Author:</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" name="author" placeholder="Author" required>
+            </div>
+        </div>
+
+         <div class="form-group row">
+            <label for="year" class="col-sm-2 col-form-label">Year:</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" name="year" placeholder="Year" required>
+            </div>
+        </div>
+
+         <div class="form-group row">
+            <label for="journal" class="col-sm-2 col-form-label">journal:</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" name="journal" placeholder="Journal" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="doi" class="col-sm-2 col-form-label">DOI:</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" name="doi" placeholder="DOI" required>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="litmapsid" class="col-sm-2 col-form-label">LitmapsID:</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" name="litmapsid" placeholder="LitmapsID" required>
+            </div>
+        </div>
+        <div class="form-group row ">
+            <div class="col-sm-5">
+                <button type="submit" class="btn btn-primary" >Add Book</button>
+             </div>
+        </div>
+
     </form>
 
     <script>
         const searchInput = document.getElementById('search');
         const resultsContainer = document.querySelector('table tbody');
-    
+
         searchInput.addEventListener('input', () => {
             const searchQuery = encodeURIComponent(searchInput.value.toLowerCase());  // Convert the query to lowercase
             fetch(`/search?search=${searchQuery}`)
@@ -70,8 +129,8 @@
                 });
         });
     </script>
-    
-    <!-- Add JavaScript for real-time search 
+
+    <!-- Add JavaScript for real-time search
     <script>
         const searchInput = document.getElementById('search');
         const resultsContainer = document.querySelector('table tbody');
@@ -86,5 +145,5 @@
         });
     </script>
     -->
-</body>
-</html>
+</div>
+{% endblock %}

@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for
 from tinydb import TinyDB, Query
-
+import re
 app = Flask(__name__)
 
 db = TinyDB('paper.json')
 table = db.table('papers')
+bookQuery=Query()
+
 @app.route('/')
 def index():
     books = table.all()
@@ -47,16 +49,14 @@ def delete(book_id):
 @app.route('/search', methods=['GET'])
 def search():
     search_query = request.args.get('search').lower()
-    print(search_query)
-    books = table.search(
-        (Query().title.search(search_query))|
-        (Query().ID.search(search_query)) |
-        (Query().author.search(search_query)) |
-        (Query().year.search(search_query)) |
-        (Query().journal.search(search_query))|
-        (Query().doi.search(search_query)) |
-        (Query().litmapsid.search(search_query)) 
-    )
+
+    books= table.search((bookQuery.title.search(search_query, flags=re.IGNORECASE)) |
+                (bookQuery.ID.search(search_query, flags=re.IGNORECASE)) |
+                (bookQuery.author.search(search_query, flags=re.IGNORECASE)) |
+                (bookQuery.year.search(search_query, flags=re.IGNORECASE)) |
+                (bookQuery.journal.search(search_query, flags=re.IGNORECASE)) |
+                (bookQuery.doi.search(search_query, flags=re.IGNORECASE)))
+
     return render_template('search_results.html', books=books)
 
 
