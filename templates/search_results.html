@@ -1,0 +1,13 @@
+{% for book in books %}
+<tr>
+    <td>{{ loop.index }}</td>
+    <td>{{ book.title }}</td>
+    <td>{{ book.author }}</td>
+    <td>{{ book.year }}</td>
+    <td>{{ book.publisher }}</td>
+    <td>
+        <a href="/edit/{{ book.doc_id }}">Edit</a>
+        <a href="/delete/{{ book.doc_id }}" onclick="return confirm('Are you sure you want to delete this record?')">Delete</a>
+    </td>
+</tr>
+{% endfor %}
